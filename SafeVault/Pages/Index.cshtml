@@ -3,12 +3,58 @@
 
 <h1>Create user</h1>
 
-<form action="/submit" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username">
-    
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email">
-    
-    <button type="submit">Submit</button>
+<form method="post">
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+	<div class="mb-3">
+		<label asp-for="Input.Username" class="form-label"></label>
+		<input asp-for="Input.Username" class="form-control" autocomplete="username" />
+		<span asp-validation-for="Input.Username" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="Input.Email" class="form-label"></label>
+		<input asp-for="Input.Email" class="form-control" autocomplete="email" />
+		<span asp-validation-for="Input.Email" class="text-danger"></span>
+	</div>
+
+	<button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+<h2>Find users</h2>
+
+<form method="get" asp-page-handler="Search">
+	<div class="mb-3">
+		<label asp-for="SearchUsername" class="form-label">Username to search</label>
+		<input asp-for="SearchUsername" class="form-control" autocomplete="off" />
+		<span asp-validation-for="SearchUsername" class="text-danger"></span>
+	</div>
+	<button type="submit" class="btn btn-secondary">Search</button>
+</form>
+
+@if (Model.SearchError is not null)
+{
+	<p role="alert" class="text-danger">@Model.SearchError</p>
+}
+else if (Model.SearchSubmitted && Model.SearchResults.Count == 0)
+{
+	<p role="status">No matching users found.</p>
+}
+else if (Model.SearchResults.Count > 0)
+{
+	<ul>
+		@foreach (var user in Model.SearchResults)
+		{
+			<li>@user.Username (@user.Email)</li>
+		}
+	</ul>
+}
+
+@if (Model.StatusMessage is not null)
+{
+	<p role="status">@Model.StatusMessage</p>
+}
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
