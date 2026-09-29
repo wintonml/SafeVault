@@ -2,13 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SafeVault.Data;
+using SafeVault.Services.Interfaces;
 using SafeVault.Utilities;
 using SafeVault.Models.ViewModels;
 using DatabaseUser = SafeVault.Models.Scaffolded.User;
 
 namespace SafeVault.Pages;
 
-public class IndexModel(SafeVaultContext db) : PageModel
+public class IndexModel(SafeVaultContext db, IPasswordHashingService passwordHashingService) : PageModel
 {
     [BindProperty]
     public UserInput Input { get; set; } = new();
@@ -76,7 +77,7 @@ public class IndexModel(SafeVaultContext db) : PageModel
         {
             Username = Input.Username!,
             Email = Input.Email!,
-            Password = Input.Password
+            Password = passwordHashingService.Hash(Input.Password!)
         });
 
         await db.SaveChangesAsync();

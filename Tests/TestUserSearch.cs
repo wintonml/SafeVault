@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SafeVault.Data;
 using SafeVault.Models.Scaffolded;
 using SafeVault.Pages;
+using SafeVault.Services.Implementations;
 
 namespace Tests;
 
@@ -27,7 +28,7 @@ public class TestUserSearch
         await _db.Database.EnsureCreatedAsync();
         _db.Users.Add(new User { Username = "admin", Email = "admin@example.com" });
         await _db.SaveChangesAsync();
-        _page = new IndexModel(_db);
+        _page = new IndexModel(_db, new PasswordHashingService());
     }
 
     [TearDown]

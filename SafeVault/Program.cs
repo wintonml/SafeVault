@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using SafeVault.Data;
+using SafeVault.Services.Implementations;
+using SafeVault.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
 
 builder.Services.AddDbContext<SafeVaultContext>(options =>
     options.UseSqlite("Data Source=SafeVault.db"));
