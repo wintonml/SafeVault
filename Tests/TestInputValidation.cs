@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using NUnit.Framework;
 using SafeVault.Utilities;
 using SafeVault.Models.ViewModels;
 
@@ -14,7 +13,9 @@ public class TestInputValidation
         var input = new UserInput
         {
             Username = "admin' OR 1=1--",
-            Email = "user@example.com"
+            Email = "user@example.com",
+            Password = "correct horse battery staple",
+            PasswordConfirmation = "correct horse battery staple"
         };
 
         Sanitize(input);
@@ -28,7 +29,9 @@ public class TestInputValidation
         var input = new UserInput
         {
             Username = "<script>alert('xss')</script>",
-            Email = "user@example.com"
+            Email = "user@example.com",
+            Password = "correct horse battery staple",
+            PasswordConfirmation = "correct horse battery staple"
         };
 
         Sanitize(input);
@@ -42,7 +45,9 @@ public class TestInputValidation
         var input = new UserInput
         {
             Username = "  Alice\u0000  ",
-            Email = "  alice@example.com\t"
+            Email = "  alice@example.com\t",
+            Password = "correct horse battery staple",
+            PasswordConfirmation = "correct horse battery staple"
         };
 
         Sanitize(input);
@@ -58,10 +63,26 @@ public class TestInputValidation
         var input = new UserInput
         {
             Username = "Admin",
-            Email = "admin@example.com"
+            Email = "admin@example.com",
+            Password = "correct horse battery staple",
+            PasswordConfirmation = "correct horse battery staple"
         };
 
         Assert.That(IsValid(input), Is.True);
+    }
+
+    [Test]
+    public void RejectsMismatchedPasswordConfirmation()
+    {
+        var input = new UserInput
+        {
+            Username = "Admin",
+            Email = "admin@example.com",
+            Password = "correct horse battery staple",
+            PasswordConfirmation = "different password"
+        };
+
+        Assert.That(IsValid(input), Is.False);
     }
 
     private static void Sanitize(UserInput input)

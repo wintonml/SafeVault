@@ -1,6 +1,5 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
 using SafeVault.Data;
 using SafeVault.Models.Scaffolded;
 using SafeVault.Pages;

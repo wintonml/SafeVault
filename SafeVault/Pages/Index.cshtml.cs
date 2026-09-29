@@ -75,7 +75,8 @@ public class IndexModel(SafeVaultContext db) : PageModel
         db.Users.Add(new DatabaseUser
         {
             Username = Input.Username!,
-            Email = Input.Email!
+            Email = Input.Email!,
+            Password = Input.Password
         });
 
         await db.SaveChangesAsync();
