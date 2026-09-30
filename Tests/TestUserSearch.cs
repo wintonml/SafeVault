@@ -12,7 +12,7 @@ public class TestUserSearch
 {
     private SqliteConnection _connection = null!;
     private SafeVaultContext _db = null!;
-    private IndexModel _page = null!;
+    private FindUsersModel _page = null!;
 
     [SetUp]
     public async Task SetUp()
@@ -28,7 +28,7 @@ public class TestUserSearch
         await _db.Database.EnsureCreatedAsync();
         _db.Users.Add(new User { Username = "admin", Email = "admin@example.com" });
         await _db.SaveChangesAsync();
-        _page = new IndexModel(_db, new PasswordHashingService());
+        _page = new FindUsersModel(_db);
     }
 
     [TearDown]

@@ -1,0 +1,34 @@
+@page
+@model FindUsersModel
+@{
+    ViewData["Title"] = "Find users";
+}
+
+<h1>Find users</h1>
+
+<form method="get" asp-page-handler="Search">
+    <div class="mb-3">
+        <label asp-for="SearchUsername" class="form-label">Username to search</label>
+        <input asp-for="SearchUsername" class="form-control" autocomplete="off" />
+        <span asp-validation-for="SearchUsername" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+@if (Model.SearchError is not null)
+{
+    <p role="alert" class="text-danger">@Model.SearchError</p>
+}
+else if (Model.SearchSubmitted && Model.SearchResults.Count == 0)
+{
+    <p role="status">No matching users found.</p>
+}
+else if (Model.SearchResults.Count > 0)
+{
+    <ul>
+        @foreach (var user in Model.SearchResults)
+        {
+            <li>@user.Username (@user.Email)</li>
+        }
+    </ul>
+}

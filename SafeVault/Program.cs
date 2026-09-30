@@ -7,6 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication("SafeVault.Cookie")
+    .AddCookie("SafeVault.Cookie", options =>
+    {
+        options.LoginPath = "/";
+        options.Cookie.Name = "SafeVault.Auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    });
 builder.Services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
 
 builder.Services.AddDbContext<SafeVaultContext>(options =>
@@ -26,6 +36,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
