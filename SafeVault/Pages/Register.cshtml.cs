@@ -27,8 +27,8 @@ public class RegisterModel(
         if (User.Identity?.IsAuthenticated == true)
             return RedirectToPage("/Index");
 
-        Input.Username = InputSanitizer.Sanitize(Input.Username);
-        Input.Email = InputSanitizer.Sanitize(Input.Email);
+        Input.Username = InputSanitizer.NormaliseIdentifier(Input.Username);
+        Input.Email = InputSanitizer.NormaliseIdentifier(Input.Email);
 
         ModelState.Clear();
         if (!TryValidateModel(Input, nameof(Input)))

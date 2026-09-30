@@ -2,7 +2,7 @@ namespace SafeVault.Utilities;
 
 public static class InputSanitizer
 {
-    public static string? Sanitize(string? value)
+    public static string? NormaliseIdentifier(string? value)
     {
         if (value is null)
             return null;

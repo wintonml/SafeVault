@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SafeVault.Data;
-using SafeVault.Models.Scaffolded;
+using SafeVault.Models.ViewModels;
 using SafeVault.Utilities;
 
 namespace SafeVault.Pages;
@@ -14,7 +14,7 @@ public class FindUsersModel(SafeVaultContext db) : PageModel
     [BindProperty(SupportsGet = true)]
     public string? SearchUsername { get; set; }
 
-    public IReadOnlyList<User> SearchResults { get; private set; } = [];
+    public IReadOnlyList<UserSearchResult> SearchResults { get; private set; } = [];
 
     public bool SearchSubmitted { get; private set; }
 
@@ -35,7 +35,7 @@ public class FindUsersModel(SafeVaultContext db) : PageModel
     private async Task<IActionResult> SearchUsersAsync(CancellationToken cancellationToken)
     {
         SearchSubmitted = true;
-        SearchUsername = InputSanitizer.Sanitize(SearchUsername);
+        SearchUsername = InputSanitizer.NormaliseIdentifier(SearchUsername);
 
         if (string.IsNullOrWhiteSpace(SearchUsername))
         {
@@ -54,6 +54,7 @@ public class FindUsersModel(SafeVaultContext db) : PageModel
             .Where(user => user.Username == SearchUsername)
             .OrderBy(user => user.UserId)
             .Take(20)
+            .Select(user => new UserSearchResult(user.Username, user.Email))
             .ToListAsync(cancellationToken);
 
         return Page();

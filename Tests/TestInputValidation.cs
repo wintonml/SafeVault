@@ -87,8 +87,8 @@ public class TestInputValidation
 
     private static void Sanitize(UserInput input)
     {
-        input.Username = InputSanitizer.Sanitize(input.Username);
-        input.Email = InputSanitizer.Sanitize(input.Email);
+        input.Username = InputSanitizer.NormaliseIdentifier(input.Username);
+        input.Email = InputSanitizer.NormaliseIdentifier(input.Email);
     }
 
     private static bool IsValid(UserInput input)
